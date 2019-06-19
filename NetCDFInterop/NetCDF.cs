@@ -564,7 +564,7 @@ namespace NetCDFInterop
                     if (null == path) throw new FileNotFoundException(name + " not found in current directory nor on system path nor in ProgramFilesX86");
                     return Path.Combine(path, name);
                 case PlatformID.Unix:
-                    return "/usr/lib/libnetcdf.so.7";
+                    return "libnetcdf.so";
                 default:
                     throw new NotSupportedException(String.Format("Platform not supported: {0}", platform));
             }
