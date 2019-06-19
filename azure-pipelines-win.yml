@@ -17,7 +17,7 @@ variables:
 steps:
 - task: CmdLine@2
   inputs:
-    script: 'powershell Invoke-WebRequest $(url_NetCDF_win) -OutFile setup-netcdf.exe
+    script: 'powershell -Command {Invoke-WebRequest $(url_NetCDF_win) -OutFile setup-netcdf.exe}
       setup-netcdf.exe /S'
 
 - task: NuGetToolInstaller@0
