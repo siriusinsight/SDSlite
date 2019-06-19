@@ -15,10 +15,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: PowerShell@2
+- task: CmdLine@2
   inputs:
-    filePath: 'install-netcdf-win.ps1'
-    arguments: '$(url_NetCDF_win)'
+    script: 'powershell Invoke-WebRequest $(url_NetCDF_win) -OutFile setup-netcdf.exe
+      setup-netcdf.exe /S'
 
 - task: NuGetToolInstaller@0
 
