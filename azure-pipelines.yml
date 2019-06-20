@@ -29,6 +29,12 @@ jobs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)'
+        Contents: '**/$(BuildConfiguration)/**/?(*.exe|*.dll|*.pdb)'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -68,3 +74,4 @@ jobs:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
+        workingDirectory: '$(Build.ArtifactStagingDirectory)'
