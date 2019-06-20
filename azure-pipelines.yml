@@ -41,4 +41,4 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
   env:
-    PATH: '$(PATH);$(CD)\\netcdf\\bin'
+    PATH: '$(PATH);$(Agent.BuildDirectory)\netcdf\bin'
