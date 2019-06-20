@@ -29,6 +29,12 @@ jobs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
     - script: |
             mkdir $(Agent.BuildDirectory)\netcdf
             cd $(Agent.BuildDirectory)\netcdf
@@ -44,7 +50,6 @@ jobs:
         configuration: '$(buildConfiguration)'
       env:
         PATH: '$(PATH);$(Agent.BuildDirectory)\netcdf\bin'
-
   - job: Ubuntu
     pool:
       vmImage: 'ubuntu-latest'
@@ -55,22 +60,10 @@ jobs:
       buildConfiguration: 'Release'
 
     steps:
-    - task: NuGetToolInstaller@0
 
-    - task: NuGetCommand@2
-      inputs:
-        restoreSolution: '$(solution)'
-
-    - task: VSBuild@1
-      inputs:
-        solution: '$(solution)'
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-
+    
     - bash: sudo apt install -y netcdf
 
-    - task: VSTest@2
+    - task: DotNetCoreCLI@2
       inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-     
+        command: 'test'
