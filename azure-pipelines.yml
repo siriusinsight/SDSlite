@@ -22,10 +22,11 @@ steps:
         cd netcdf
         7z x ../netcdf.exe
         cd ..
-        path %PATH%:%CD%/netcdf/bin
+        dir /b/s %CD%/netcdf/bin
+        path %PATH%;%CD%/netcdf/bin
   displayName: 'Extract NetCDF library'
 
-- powershell: 'ls env:'
+- script: 'path'
 
 - task: NuGetToolInstaller@0
 
