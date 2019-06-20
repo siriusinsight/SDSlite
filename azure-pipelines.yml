@@ -16,8 +16,8 @@ variables:
 
 steps:
 - script: |
-        mkdir netcdf
-        cd netcdf
+        mkdir $(Agent.BuildDirectory)\netcdf
+        cd $(Agent.BuildDirectory)\netcdf
         echo Start download from $(url_NetCDF_win)
         powershell Invoke-WebRequest $(url_NetCDF_win) -OutFile netcdf.exe
         echo Download succeeded.
