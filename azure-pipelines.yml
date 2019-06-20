@@ -15,18 +15,14 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- powershell: 'Invoke-WebRequest $(url_NetCDF_win) -OutFile netcdf.exe'
-  displayName: 'Download NetCDF installer from UCAR web site'
 - script: |
         mkdir netcdf
         cd netcdf
-        7z x ../netcdf.exe
-        cd ..
-        dir /b/s %CD%\netcdf\bin
-        path %PATH%;%CD%\netcdf\bin
-  displayName: 'Extract NetCDF library'
-
-- script: 'path'
+        echo Start download from $(url_NetCDF_win)
+        powershell Invoke-WebRequest $(url_NetCDF_win) -OutFile netcdf.exe
+        echo Download succeeded.
+        7z x netcdf.exe
+  displayName: 'Download NetCDF library from UCAR web site'
 
 - task: NuGetToolInstaller@0
 
@@ -44,3 +40,5 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+  env:
+    PATH: '$(PATH);$(CD)\netcdf\bin'
