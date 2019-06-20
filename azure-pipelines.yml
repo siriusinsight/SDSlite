@@ -6,39 +6,71 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'windows-latest'
+jobs:
+- job: 'Build and test on Windows'
+    pool:
+      vmImage: 'windows-latest'
 
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
 
-steps:
-- script: |
-        mkdir $(Agent.BuildDirectory)\netcdf
-        cd $(Agent.BuildDirectory)\netcdf
-        echo Start download from $(url_NetCDF_win)
-        powershell Invoke-WebRequest $(url_NetCDF_win) -OutFile netcdf.exe
-        echo Download succeeded.
-        7z x netcdf.exe
-  displayName: 'Download NetCDF library from UCAR web site'
+    steps:
+    - task: NuGetToolInstaller@0
 
-- task: NuGetToolInstaller@0
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    - script: |
+            mkdir $(Agent.BuildDirectory)\netcdf
+            cd $(Agent.BuildDirectory)\netcdf
+            echo Start download from $(url_NetCDF_win)
+            powershell Invoke-WebRequest $(url_NetCDF_win) -OutFile netcdf.exe
+            echo Download succeeded.
+            7z x netcdf.exe
+      displayName: 'Download NetCDF library from UCAR web site'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-  env:
-    PATH: '$(PATH);$(Agent.BuildDirectory)\netcdf\bin'
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+      env:
+        PATH: '$(PATH);$(Agent.BuildDirectory)\netcdf\bin'
+
+- job: 'Build and test on Ubuntu'
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+
+    steps:
+    - task: NuGetToolInstaller@0
+
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - bash: sudo apt install -y netcdf
+
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+     
