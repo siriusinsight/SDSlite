@@ -51,6 +51,7 @@ jobs:
       env:
         PATH: '$(PATH);$(Agent.BuildDirectory)\netcdf\bin'
   - job: Ubuntu
+    dependsOn: Windows
     pool:
       vmImage: 'ubuntu-latest'
 
@@ -62,7 +63,7 @@ jobs:
     steps:
 
     
-    - bash: sudo apt install -y netcdf
+    - bash: sudo apt-get install -y netcdf-dev
 
     - task: DotNetCoreCLI@2
       inputs:
