@@ -22,8 +22,8 @@ steps:
         cd netcdf
         7z x ../netcdf.exe
         cd ..
-        dir /b/s %CD%/netcdf/bin
-        path %PATH%;%CD%/netcdf/bin
+        dir /b/s %CD%\netcdf\bin
+        path %PATH%;%CD%\netcdf\bin
   displayName: 'Extract NetCDF library'
 
 - script: 'path'
