@@ -7,7 +7,7 @@ trigger:
 - master
 
 jobs:
-- job: 'Build and test on Windows'
+  - job: Windows
     pool:
       vmImage: 'windows-latest'
 
@@ -45,7 +45,7 @@ jobs:
       env:
         PATH: '$(PATH);$(Agent.BuildDirectory)\netcdf\bin'
 
-- job: 'Build and test on Ubuntu'
+  - job: Ubuntu
     pool:
       vmImage: 'ubuntu-latest'
 
