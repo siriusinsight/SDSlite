@@ -68,10 +68,16 @@ jobs:
 
     steps:
 
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
     
-    - bash: sudo apt-get install -y netcdf-dev
+    - bash: sudo apt-get install -y libnetcdf-dev
 
     - task: DotNetCoreCLI@2
       inputs:
         command: 'test'
-        workingDirectory: '$(Build.ArtifactStagingDirectory)'
+        workingDirectory: '$(System.ArtifactsDirectory)'
