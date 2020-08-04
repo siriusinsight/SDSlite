@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
-- v461-AppContext.BaseDirectory
+- master
 
 pool:
   vmImage: 'windows-latest'
@@ -34,7 +34,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: 'SDSLite/*.nuspec'
+    packagesToPack: '**/SDSLite.csproj'
     versioningScheme: 'off'
 - task: NuGetCommand@2
   inputs:
